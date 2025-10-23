@@ -18,6 +18,8 @@
     "mongoose": "^7.0.0"
   },
   "devDependencies": {
+    "chai": "^6.2.0",
+    "chai-http": "^5.1.2",
     "dotenv": "^16.0.3",
     "mocha": "^11.7.4",
     "mongoose": "^7.0.1",
