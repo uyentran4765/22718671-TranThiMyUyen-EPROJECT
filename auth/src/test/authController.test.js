@@ -8,14 +8,14 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe("User Authentication", () => {
-  // let app;
+  let app;
   // const API_URL = "http://uyen_api_gateway:3003"; // Thêm dòng này
   let authToken;
 
   before(async () => {
-    // app = new App();
-    // await app.connectDB();
-    // app.start();
+    app = new App();
+    await app.connectDB();
+    app.start();
 
     const authRes = await chai
       .request("http://uyen_api_gateway:3003")
