@@ -44,8 +44,10 @@ describe("User Authentication", () => {
 
     it("should return an error if the username is already taken", async () => {
       const res = await chai
-        .request(app.app)
-        .post("/register")
+      .request("http://uyen_api_gateway:3003")
+        // .request(app.app)
+        // .post("/register")
+        .post("/auth/api/v1/register")
         .send({ username: "testuser", password: "password" });
 
       expect(res).to.have.status(400);
@@ -58,7 +60,8 @@ describe("User Authentication", () => {
       const res = await chai
         // .request(app.app)
         .request("http://uyen_api_gateway:3003")
-        .post("/login")
+        // .post("/login")
+        .post("/auth/api/v1/login")
         .send({ username: "testuser", password: "password" });
 
       expect(res).to.have.status(200);
@@ -69,7 +72,8 @@ describe("User Authentication", () => {
       const res = await chai
         // .request(app.app)
         .request("http://uyen_api_gateway:3003")
-        .post("/login")
+        // .post("/login")
+        .post("/auth/api/v1/login")
         .send({ username: "invaliduser", password: "password" });
 
       expect(res).to.have.status(400);
@@ -80,7 +84,8 @@ describe("User Authentication", () => {
       const res = await chai
         // .request(app.app)
         .request("http://uyen_api_gateway:3003")
-        .post("/login")
+        // .post("/login")
+        .post("/auth/api/v1/login")
         .send({ username: "testuser", password: "wrongpassword" });
 
       expect(res).to.have.status(400);
