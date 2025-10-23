@@ -45,20 +45,20 @@ jobs:
         run: sleep 25
 
       # 5️⃣ Kiểm tra container đang chạy
-      - name: list var to check
+      - name: List var to check
         run: echo "hello ${{ vars.JWT_SECRET }} , ${{ vars.MONGODB_PRODUCT_URI }} , ${{ vars.MONGODB_ORDER_URI }}"
 
       # 5️⃣ Kiểm tra container đang chạy
       - name: List running containers
         run: docker ps
 
-      # 7 Chạy file test trên product service 
+      # 7 Chạy file test trên auth service 
+      - name: Run File Test In Auth Service
+        run: docker exec --env-file .env.ci uyen_auth_service npm test
+      # 8 Chạy file test trên product service 
       - name: Run File Test In Product Service
         run: docker exec --env-file .env.ci uyen_product_service npm test
 
-      - name: Run File Test In Auth Service
-        run: docker exec --env-file .env.ci uyen_auth_service npm test
-        
       # 6️⃣ Dừng container sau khi test
       - name: Stop containers
         run: docker compose -f docker-compose.yml down
