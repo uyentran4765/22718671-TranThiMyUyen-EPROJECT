@@ -9,17 +9,15 @@ const { expect } = chai;
 
 describe("User Authentication", () => {
   let app;
-  // const API_URL = "http://uyen_api_gateway:3003"; // Thêm dòng này
   let authToken;
 
   before(async () => {
-    app = new App();
-    await app.connectDB();
-    app.start();
+    // app = new App();
+    // await app.connectDB();
+    // app.start();
 
     const authRes = await chai
       .request("http://uyen_api_gateway:3003")
-      // .request(API_URL)
       .post("/auth/api/v1/login")
       .send({ username: "testuser", password: "123456" });
 
@@ -36,7 +34,6 @@ describe("User Authentication", () => {
     it("should register a new user", async () => {
       const res = await chai
         .request('http://uyen_api_gateway:3003')
-        // .request(API_URL)
         .post("/auth/api/v1/register")
         .send({ username: "uyen_hehehe", password: "123" });
 
@@ -48,7 +45,6 @@ describe("User Authentication", () => {
     it("should return an error if the username is already taken", async () => {
       const res = await chai
         .request(app.app)
-        // .request(API_URL)
         .post("/register")
         .send({ username: "testuser", password: "password" });
 
@@ -61,7 +57,6 @@ describe("User Authentication", () => {
     it("should return a JWT token for a valid user", async () => {
       const res = await chai
         .request(app.app)
-        // .request(API_URL)
         .post("/login")
         .send({ username: "testuser", password: "password" });
 
@@ -72,7 +67,6 @@ describe("User Authentication", () => {
     it("should return an error for an invalid user", async () => {
       const res = await chai
         .request(app.app)
-        // .request(API_URL)
         .post("/login")
         .send({ username: "invaliduser", password: "password" });
 
@@ -83,7 +77,6 @@ describe("User Authentication", () => {
     it("should return an error for an incorrect password", async () => {
       const res = await chai
         .request(app.app)
-        // .request(API_URL)
         .post("/login")
         .send({ username: "testuser", password: "wrongpassword" });
 
