@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 describe("User Authentication", () => {
-  let app;
+  // let app;
   let authToken;
 
   before(async () => {
@@ -56,7 +56,8 @@ describe("User Authentication", () => {
   describe("POST /login", () => {
     it("should return a JWT token for a valid user", async () => {
       const res = await chai
-        .request(app.app)
+        // .request(app.app)
+        .request("http://uyen_api_gateway:3003")
         .post("/login")
         .send({ username: "testuser", password: "password" });
 
@@ -66,7 +67,8 @@ describe("User Authentication", () => {
 
     it("should return an error for an invalid user", async () => {
       const res = await chai
-        .request(app.app)
+        // .request(app.app)
+        .request("http://uyen_api_gateway:3003")
         .post("/login")
         .send({ username: "invaliduser", password: "password" });
 
@@ -76,7 +78,8 @@ describe("User Authentication", () => {
 
     it("should return an error for an incorrect password", async () => {
       const res = await chai
-        .request(app.app)
+        // .request(app.app)
+        .request("http://uyen_api_gateway:3003")
         .post("/login")
         .send({ username: "testuser", password: "wrongpassword" });
 
