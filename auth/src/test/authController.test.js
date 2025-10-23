@@ -48,7 +48,7 @@ describe("User Authentication", () => {
         // .request(app.app)
         // .post("/register")
         .post("/auth/api/v1/register")
-        .send({ username: "testuser", password: "password" });
+        .send({ username: "testuser", password: "123456" });
 
       expect(res).to.have.status(400);
       expect(res.body).to.have.property("message", "Username already taken");
