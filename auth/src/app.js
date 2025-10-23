@@ -20,7 +20,7 @@ class App {
 
   async connectDB() {
     try {
-      // console.log(config.mongoURI, 'đường dẫn môngdb');
+      // console.log(config.mongoURI, 'đường dẫn mongogdb');
       await mongoose.connect(config.mongoURI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
