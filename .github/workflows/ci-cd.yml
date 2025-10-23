@@ -56,6 +56,9 @@ jobs:
       - name: Run File Test In Product Service
         run: docker exec --env-file .env.ci uyen_product_service npm test
 
+      - name: Run File Test In Auth Service
+        run: docker exec --env-file .env.ci uyen_auth_service npm test
+        
       # 6️⃣ Dừng container sau khi test
       - name: Stop containers
         run: docker compose -f docker-compose.yml down
