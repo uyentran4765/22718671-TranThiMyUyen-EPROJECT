@@ -62,7 +62,7 @@ describe("User Authentication", () => {
         .request("http://uyen_api_gateway:3003")
         // .post("/login")
         .post("/auth/api/v1/login")
-        .send({ username: "testuser", password: "password" });
+        .send({ username: "testuser", password: "123456" });
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.property("token");
