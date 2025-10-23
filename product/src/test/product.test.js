@@ -14,7 +14,7 @@ describe("Products", () => {
 
   // before chạy trc
   before(async () => {
-
+    console.log('ĐÃ VÀO ĐÂY')
     const authRes = await chai
       .request("http://uyen_api_gateway:3003")
       .post("/auth/api/v1/login")
