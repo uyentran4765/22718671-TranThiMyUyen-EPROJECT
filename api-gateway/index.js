@@ -1,9 +1,9 @@
 const express = require("express");
 const httpProxy = require("http-proxy");
-
+const morgan= require("morgan");
 const proxy = httpProxy.createProxyServer();
 const app = express();
-
+app.use(morgan("tiny"));
 // Route requests to the auth service
 app.use("/auth", (req, res) => {
   req.url = "/auth" + req.url;
