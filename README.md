@@ -49,6 +49,48 @@
 
 ---
 
+## ❓ Câu hỏi thường gặp
+
+### 1. 🎯 Hệ thống giải quyết vấn đề gì?
+
+**E-commerce Platform** với kiến trúc microservices:
+
+- Quản lý người dùng (đăng ký, đăng nhập, xác thực)
+- Quản lý sản phẩm (thêm, xem danh sách)
+- Quản lý đơn hàng (tạo đơn, theo dõi lịch sử)
+- Scalability và fault tolerance cho ứng dụng thương mại điện tử
+
+### 2. 📊 Hệ thống có bao nhiều dịch vụ?
+
+**7 thành phần chính:**
+
+- **Core Services (4):** API Gateway, Auth, Product, Order
+- **Infrastructure (3):** MongoDB, RabbitMQ, RabbitMQ Management UI
+
+### 3. 🔍 Ý nghĩa từng dịch vụ:
+
+- **API Gateway:** Điểm vào duy nhất, định tuyến requests
+- **Auth Service:** Xác thực JWT, quản lý users, lịch sử đơn hàng
+- **Product Service:** CRUD sản phẩm, gửi order requests
+- **Order Service:** Xử lý đơn hàng bất đồng bộ, business rules
+
+### 4. 🏗️ Các mẫu thiết kế được sử dụng:
+
+- **Microservices Architecture:** Services độc lập
+- **API Gateway Pattern:** Single entry point
+- **Database per Service:** Mỗi service có DB riêng
+- **Event-Driven:** Async communication qua RabbitMQ
+- **Repository Pattern:** Data access abstraction
+
+### 5. 🔄 Các dịch vụ giao tiếp như thế nào:
+
+- **Synchronous:** HTTP/REST qua API Gateway
+- **Asynchronous:** RabbitMQ message queues
+- **Security:** JWT tokens trong headers
+- **Network:** Docker internal network
+
+---
+
 ## 🚀 Hướng dẫn cài đặt và chạy
 
 ### Bước 1: Chuẩn bị môi trường
@@ -143,10 +185,10 @@ docker ps
 ![Xem dashboard](public/dashboard.png)
 
 ---
+
 **Người dùng được lưu trong MongoDB:**
 
 ![Người dùng trong DB](public/userMongo.png)
-
 
 ### 4. 🛒 Thêm sản phẩm
 
@@ -165,7 +207,7 @@ Authorization: Bearer <JWT_TOKEN>
   "name": "Sản phẩm test",
   "price": 50000,
   "description": "Mô tả sản phẩm",
-  "quantity": 100,
+  "quantity": 100
 }
 ```
 
@@ -211,7 +253,6 @@ Authorization: Bearer <JWT_TOKEN>
 
 ## Logging
 
-
 ### 📝 System Logging
 
 Các service được cấu hình để ghi log chi tiết:
@@ -253,7 +294,7 @@ Hệ thống được tích hợp CI/CD pipeline với GitHub Actions:
 3. **Deploy Stage**:
    - Push images lên Docker Hub
    - Deploy lên environment (staging/production)
-![GitHub Actions](public/cicdDocker.png)
+     ![GitHub Actions](public/cicdDocker.png)
 
 ## 🛠️ Troubleshooting
 
@@ -272,7 +313,7 @@ netstat -tulpn | grep :3003
 
 #### 2. **Kết nối MongoDB thất bại**
 
-```bash
+````bash
 # Kiểm tra MongoDB container
 docker logs uyen_mongodb
 
@@ -282,7 +323,7 @@ docker logs uyen_rabbitmq
 
 # Truy cập management UI
 curl http://localhost:15672
-```
+````
 
 #### 4. **JWT Token không hợp lệ**
 
@@ -359,6 +400,7 @@ docker-compose logs -f
 - **ESLint** - Code linting
 
 ---
+
 ## 📞 Support & Contact
 
 ### Getting Help
@@ -434,6 +476,6 @@ copies or substantial portions of the Software.
 
 ---
 
-🧑‍💻 **Tác giả:** TRẦN THỊ MỸ UYÊN   
+🧑‍💻 **Tác giả:** TRẦN THỊ MỸ UYÊN  
 📅 **Cập nhật lần cuối:** 2025-10-24  
 ⭐ **Version:** 1.0.0
