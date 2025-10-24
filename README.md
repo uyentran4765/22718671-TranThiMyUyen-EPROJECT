@@ -293,6 +293,7 @@ Hệ thống được tích hợp CI/CD pipeline với GitHub Actions:
 3. **Deploy Stage**:
    - Push images lên Docker Hub
    - Deploy lên environment (staging/production)
+   
 ![GitHub Actions](public/cicdDocker.png)
 
 ## 🛠️ Troubleshooting
