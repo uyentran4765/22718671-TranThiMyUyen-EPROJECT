@@ -1,4 +1,4 @@
-# � Hướng dẫn: Hệ thống Microservices với RabbitMQ & JWT
+# Hướng dẫn: Hệ thống Microservices với RabbitMQ & JWT
 
 ## 📖 Giới thiệu
 
