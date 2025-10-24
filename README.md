@@ -175,8 +175,6 @@ docker ps
 
 ---
 
----
-
 ### 3. 🔐 Xem dashboard
 
 **Endpoint:** `GET /auth/api/v1/dashboard`
