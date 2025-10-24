@@ -458,6 +458,8 @@ docker-compose up --build
 📅 **Cập nhật lần cuối:** 2025-10-24  
 ⭐ **Version:** 1.0.0
 
+---
+
 ## 📄 License
 
 Dự án này được phát hành dưới [MIT License](LICENSE).
