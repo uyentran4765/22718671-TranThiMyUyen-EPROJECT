@@ -293,7 +293,7 @@ Hệ thống được tích hợp CI/CD pipeline với GitHub Actions:
 3. **Deploy Stage**:
    - Push images lên Docker Hub
    - Deploy lên environment (staging/production)
-   
+
 ![GitHub Actions](public/cicdDocker.png)
 
 ## 🛠️ Troubleshooting
@@ -433,26 +433,6 @@ docker-compose up --build
 
 ---
 
-## 📄 License
-
-Dự án này được phát hành dưới [MIT License](LICENSE).
-
-```
-MIT License
-
-Copyright (c) 2025 Trần Thị Mỹ Uyên
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-```
-
 ---
 
 ## 🙏 Acknowledgments
@@ -479,3 +459,14 @@ copies or substantial portions of the Software.
 🧑‍💻 **Tác giả:** TRẦN THỊ MỸ UYÊN  
 📅 **Cập nhật lần cuối:** 2025-10-24  
 ⭐ **Version:** 1.0.0
+
+## 📄 License
+
+Dự án này được phát hành dưới [MIT License](LICENSE).
+
+```
+MIT License
+
+Copyright (c) 2025 Trần Thị Mỹ Uyên
+
+```
