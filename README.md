@@ -27,7 +27,7 @@
         ▼                        ▼                        ▼
 ┌─────────────┐          ┌─────────────┐          ┌─────────────┐
 │Auth Service │          │Product      │          │Order Service│
-│    :3001    │          │Service:3002 │          │    :3004    │
+│    :3000    │          │Service:3001 │          │    :3002    │
 └─────┬───────┘          └─────┬───────┘          └─────┬───────┘
       │                        │                        │
       └────────────────────────┼────────────────────────┘
@@ -41,9 +41,9 @@
 ### Chi tiết từng service:
 
 - **API Gateway (Port 3003)**: Định tuyến request, xác thực JWT
-- **Auth Service (Port 3001)**: Đăng ký, đăng nhập, quản lý user
-- **Product Service (Port 3002)**: CRUD sản phẩm
-- **Order Service (Port 3004)**: Tạo và quản lý đơn hàng
+- **Auth Service (Port 3000)**: Đăng ký, đăng nhập, quản lý user
+- **Product Service (Port 3001)**: CRUD sản phẩm
+- **Order Service (Port 3002)**: Tạo và quản lý đơn hàng
 - **RabbitMQ**: Giao tiếp bất đồng bộ giữa các service
 - **MongoDB**: Database riêng cho từng service
 
