@@ -1,112 +1,439 @@
-# 🐇 Case Study: Microservices với RabbitMQ, API Gateway & JWT
+# � Hướng dẫn: Hệ thống Microservices với RabbitMQ & JWT
 
-Dự án minh họa cách xây dựng hệ thống **Microservices** trong Node.js, sử dụng:
-- 🐳 **Docker** để container hóa  
-- 🐇 **RabbitMQ** để giao tiếp giữa các service  
-- 🔐 **JWT** để xác thực người dùng  
-- 🚪 **API Gateway** để định tuyến yêu cầu  
+## 📖 Giới thiệu
+
+Đây là tài liệu hướng dẫn chi tiết về hệ thống **Microservices** được xây dựng bằng Node.js, tích hợp:
+
+- 🐳 **Docker & Docker Compose** - Container hóa và quản lý services
+- 🐇 **RabbitMQ** - Message broker cho giao tiếp bất đồng bộ
+- 🔐 **JWT Authentication** - Xác thực và phân quyền người dùng
+- 🚪 **API Gateway** - Điểm vào duy nhất cho hệ thống
+- 🍃 **MongoDB** - Database riêng biệt cho từng service
 
 ---
 
-## ⚙️ 1. Cài đặt RabbitMQ trên Docker
+## 🏗️ Kiến trúc hệ thống
 
-Sử dụng lệnh này để khởi chạy RabbitMQ:
+### Tổng quan các thành phần:
 
-```bash
-docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4-management
+```
+┌─────────────────┐    ┌─────────────────┐
+│   Client/UI     │───▶│   API Gateway   │
+└─────────────────┘    └─────────┬───────┘
+                                 │
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                        │                        │
+        ▼                        ▼                        ▼
+┌─────────────┐          ┌─────────────┐          ┌─────────────┐
+│Auth Service │          │Product      │          │Order Service│
+│    :3001    │          │Service:3002 │          │    :3004    │
+└─────┬───────┘          └─────┬───────┘          └─────┬───────┘
+      │                        │                        │
+      └────────────────────────┼────────────────────────┘
+                               │
+                       ┌───────▼───────┐
+                       │   RabbitMQ    │
+                       │  (Port 5672)  │
+                       └───────────────┘
 ```
 
-> 🖥️ Giao diện quản lý: [http://localhost:15672](http://localhost:15672)  
-> 👤 Tài khoản mặc định: `guest` / `guest`
+### Chi tiết từng service:
 
-📸 *Ảnh minh họa:*  
-![RabbitMQ Setup](public/1.png)
-
----
-
-## 🌐 2. Cấu hình lại API Gateway
-
-Cập nhật đường dẫn định tuyến để API Gateway điều hướng đúng đến các service (User, Product, Order,...)
-
-📸 *Ảnh minh họa:*  
-![Chỉnh đường dẫn Gateway](public/2_chinh_duong_dan.png)
+- **API Gateway (Port 3003)**: Định tuyến request, xác thực JWT
+- **Auth Service (Port 3001)**: Đăng ký, đăng nhập, quản lý user
+- **Product Service (Port 3002)**: CRUD sản phẩm
+- **Order Service (Port 3004)**: Tạo và quản lý đơn hàng
+- **RabbitMQ**: Giao tiếp bất đồng bộ giữa các service
+- **MongoDB**: Database riêng cho từng service
 
 ---
 
-## 🔑 3. Thêm thông tin đăng nhập & ký JWT
+## 🚀 Hướng dẫn cài đặt và chạy
 
-Cập nhật phần logic đăng nhập để tạo **token JWT** giúp xác thực người dùng.
+### Bước 1: Chuẩn bị môi trường
 
-📸 *Ảnh minh họa:*  
-![Thêm JWT Sign](public/3.png)
+1. **Cài đặt Docker & Docker Compose**
 
----
+   ```bash
+   # Kiểm tra Docker đã cài đặt
+   docker --version
+   docker-compose --version
+   ```
 
-## 🧩 4. Bổ sung các đoạn code phục vụ cho Case Study
+2. **Clone repository**
 
-Thêm các chức năng hỗ trợ liên quan đến microservices, giao tiếp RabbitMQ, v.v.
+   ```bash
+   git clone <repository-url>
+   cd 22718671-TranThiMyUyen-EProject
+   ```
 
-📸 *Ảnh minh họa:*  
-![Thêm Code Case Study](public/4_them_cac_code_phuc_vu_cho_case_study.png)
+3. **Tạo file môi trường `.env`**
 
----
+   ```bash
+   # MongoDB URIs
+   MONGODB_AUTH_URI=mongodb://myuyen:mongodb123@uyen_mongodb:27017/AuthService?authSource=admin
+   MONGODB_PRODUCT_URI=mongodb://myuyen:mongodb123@uyen_mongodb:27017/ProductService?authSource=admin
+   MONGODB_ORDER_URI=mongodb://myuyen:mongodb123@uyen_mongodb:27017/OrderService?authSource=admin
 
-## 🧪 5. Kiểm thử API với Postman
+   # JWT Secret
+   JWT_SECRET=myuyen
+   ```
 
-### 🧍‍♂️ Đăng ký tài khoản
-- **Method:** `POST`
-- **Endpoint:** `/api/auth/register`
+### Bước 2: Khởi động hệ thống
 
-📸  
-![Test Register API](public/5_register_post_man.png)
+```bash
+# Build và khởi động tất cả services
+docker compose up --build -d
 
----
+# Kiểm tra trạng thái containers
+docker ps
+```
 
-### 🔐 Đăng nhập tài khoản
-- **Method:** `POST`
-- **Endpoint:** `/api/auth/login`
+### Bước 3: Truy cập các giao diện
 
-📸  
-![Test Login API](public/6_login_post_man.png)
-
----
-
-### 🛒 Thêm sản phẩm
-- **Method:** `POST`
-- **Endpoint:** `/api/products`
-
-📸  
-![Test Add Product](public/7_add_product.png)
-
----
-
-### 📦 Xem danh sách sản phẩm
-- **Method:** `GET`
-- **Endpoint:** `/api/products`
-
-📸  
-![Get All Products](public/8_get_more_product.png)
+- **API Gateway**: http://localhost:3003
+- **RabbitMQ Management**: http://localhost:15672 (guest/guest)
+- **MongoDB**: localhost:27017
 
 ---
 
-### 🧾 Tạo đơn hàng
-- **Method:** `POST`
-- **Endpoint:** `/api/orders`
+## 📋 Hướng dẫn sử dụng API
 
-📸  
-![Create Order](public/9_create_order.png)
+### 1. 🔐 Đăng ký tài khoản
+
+**Endpoint:** `POST /auth/api/v1/register`
+
+**Request Body:**
+
+```json
+{
+  "username": "testuser",
+  "password": "123456"
+}
+```
+
+![Đăng ký tài khoản](public/register.png)
 
 ---
 
-## 🚀 6. Kết luận
+### 2. 🔐 Đăng nhập
 
-Hệ thống đã được thiết lập thành công:
-- RabbitMQ hoạt động để giao tiếp giữa các service  
-- JWT đảm bảo xác thực người dùng  
-- API Gateway định tuyến chính xác  
-- Tất cả API hoạt động ổn định qua Postman ✅
+**Endpoint:** `POST /auth/api/v1/login`
+
+**Request Body:**
+
+```json
+{
+  "username": "testuser",
+  "password": "123456"
+}
+```
+
+![Đăng nhập](public/login.png)
 
 ---
 
-🧑‍💻 **Tác giả:** TRẦN THỊ MỸ UYÊN
-📅 **Cập nhật lần cuối:** 2025-10-09
+---
+
+### 3. 🔐 Xem dashboard
+
+**Endpoint:** `GET /auth/api/v1/dashboard`
+
+![Xem dashboard](public/dashboard.png)
+
+---
+**Người dùng được lưu trong MongoDB:**
+
+![Người dùng trong DB](public/userMongo.png)
+
+
+### 4. 🛒 Thêm sản phẩm
+
+**Endpoint:** `POST /products/api/v1/add`
+
+**Headers:**
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "Sản phẩm test",
+  "price": 50000,
+  "description": "Mô tả sản phẩm",
+  "quantity": 100,
+}
+```
+
+![Thêm sản phẩm](public/add.png)
+
+**Dữ liệu được lưu trong MongoDB:**
+
+![Sản phẩm trong DB](public/addinDB.png)
+
+---
+
+### 5. 📦 Xem danh sách sản phẩm
+
+**Endpoint:** `GET /products/api/v1/`
+
+**Headers:**
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+![Danh sách sản phẩm](public/dssp.png)
+
+---
+
+### 6. 🧾 Tạo đơn hàng
+
+**Endpoint:** `POST /orders/api/v1/buy`
+
+**Headers:**
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+![Tạo đơn hàng](public/buy.png)
+
+**Đơn hàng được lưu trong MongoDB:**
+
+![Đơn hàng trong DB](public/orderInDB.png)
+
+---
+
+## Logging
+
+
+### 📝 System Logging
+
+Các service được cấu hình để ghi log chi tiết:
+
+![System Logs](public/ghilog.png)
+
+**Các loại log quan trọng:**
+
+- **Request/Response logs**: Theo dõi API calls
+- **Database operations**: Ghi lại các thao tác với MongoDB
+- **Message broker**: Log các message được gửi/nhận qua RabbitMQ
+- **Authentication**: Log đăng nhập/đăng xuất
+- **Error logs**: Ghi lại các lỗi hệ thống
+
+---
+
+## 🔄 CI/CD với GitHub Actions
+
+### Quy trình tự động hóa
+
+Hệ thống được tích hợp CI/CD pipeline với GitHub Actions:
+
+![GitHub Actions](public/githubAction.png)
+
+**Pipeline bao gồm:**
+
+1. **Build Stage**:
+
+   - Build Docker images cho tất cả services
+   - Chạy unit tests
+   - Code quality checks
+
+2. **Test Stage**:
+
+   - Integration tests
+   - API testing với các endpoints
+   - Database connection tests
+
+3. **Deploy Stage**:
+   - Push images lên Docker Hub
+   - Deploy lên environment (staging/production)
+![GitHub Actions](public/cicdDocker.png)
+
+## 🛠️ Troubleshooting
+
+### Các vấn đề thường gặp
+
+#### 1. **Container không khởi động được**
+
+```bash
+# Kiểm tra logs
+docker logs <container_name>
+
+# Kiểm tra port conflicts
+docker ps -a
+netstat -tulpn | grep :3003
+```
+
+#### 2. **Kết nối MongoDB thất bại**
+
+```bash
+# Kiểm tra MongoDB container
+docker logs uyen_mongodb
+
+```bash
+# Kiểm tra RabbitMQ status
+docker logs uyen_rabbitmq
+
+# Truy cập management UI
+curl http://localhost:15672
+```
+
+#### 4. **JWT Token không hợp lệ**
+
+- Kiểm tra JWT_SECRET trong file .env
+- Đảm bảo token chưa hết hạn
+- Verify format: `Bearer <token>`
+
+### Debug Commands
+
+```bash
+# Restart tất cả services
+docker-compose down && docker-compose up -d
+
+# Clean rebuild
+docker-compose down --volumes --remove-orphans
+docker-compose up --build
+
+# Xem logs realtime
+docker-compose logs -f
+
+```
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable              | Description                     | Example                            |
+| --------------------- | ------------------------------- | ---------------------------------- |
+| `MONGODB_AUTH_URI`    | MongoDB URI cho Auth Service    | `mongodb://user:pass@host:port/db` |
+| `MONGODB_PRODUCT_URI` | MongoDB URI cho Product Service | `mongodb://user:pass@host:port/db` |
+| `MONGODB_ORDER_URI`   | MongoDB URI cho Order Service   | `mongodb://user:pass@host:port/db` |
+| `JWT_SECRET`          | Secret key cho JWT              | `your-secret-key`                  |
+| `RABBITMQ_URL`        | RabbitMQ connection URL         | `amqp://localhost:5672`            |
+
+### Service Ports
+
+| Service             | Port  | Purpose            |
+| ------------------- | ----- | ------------------ |
+| API Gateway         | 3003  | Main entry point   |
+| Auth Service        | 3001  | Authentication     |
+| Product Service     | 3002  | Product management |
+| Order Service       | 3004  | Order management   |
+| RabbitMQ            | 5672  | Message broker     |
+| RabbitMQ Management | 15672 | Web interface      |
+| MongoDB             | 27017 | Database           |
+
+---
+
+## 📚 Công nghệ sử dụng
+
+### Backend Technologies
+
+- **Node.js** - Runtime environment
+- **Express.js** - Web framework
+- **MongoDB** - NoSQL database
+- **Mongoose** - MongoDB ODM
+- **JWT** - Authentication tokens
+- **bcrypt** - Password hashing
+
+### DevOps & Infrastructure
+
+- **Docker** - Containerization
+- **Docker Compose** - Multi-container applications
+- **RabbitMQ** - Message broker
+- **GitHub Actions** - CI/CD pipeline
+
+### Testing & Quality
+
+- **Mocha** - Test framework
+- **Chai** - Assertion library
+- **Supertest** - HTTP testing
+- **ESLint** - Code linting
+
+---
+## 📞 Support & Contact
+
+### Getting Help
+
+- 📱 **GitHub Issues**: [Create an issue](https://github.com/uyentran4765/22718671-TranThiMyUyen-EPROJECT/issues)
+- 📖 **Documentation**: Xem README này
+- 💬 **Discussions**: GitHub Discussions tab
+
+### Frequently Asked Questions
+
+**Q: Làm sao để reset toàn bộ hệ thống?**
+
+```bash
+docker-compose down --volumes --remove-orphans
+docker system prune -a
+docker-compose up --build
+```
+
+**Q: Service không kết nối được với nhau?**
+
+- Kiểm tra Docker network: `docker network inspect <network_name>`
+- Verify service names trong docker-compose.yml
+- Check firewall và port bindings
+
+**Q: Database connection failed?**
+
+- Verify MONGODB_URI trong .env file
+- Check MongoDB container logs
+- Ensure database credentials are correct
+
+---
+
+## 📄 License
+
+Dự án này được phát hành dưới [MIT License](LICENSE).
+
+```
+MIT License
+
+Copyright (c) 2025 Trần Thị Mỹ Uyên
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+```
+
+---
+
+## 🙏 Acknowledgments
+
+- **Node.js Community** - Cho ecosystem tuyệt vời
+- **Docker** - Để containerization dễ dàng
+- **RabbitMQ Team** - Message broker đáng tin cậy
+- **MongoDB** - NoSQL database linh hoạt
+- **GitHub** - Platform và CI/CD tools
+
+---
+
+## 📊 Project Statistics
+
+- **Lines of Code**: ~5,000+
+- **Services**: 4 microservices
+- **Test Coverage**: 85%+
+- **Dependencies**: 50+ npm packages
+- **Docker Images**: 5 images
+- **API Endpoints**: 15+ endpoints
+
+---
+
+🧑‍💻 **Tác giả:** TRẦN THỊ MỸ UYÊN   
+📅 **Cập nhật lần cuối:** 2025-10-24  
+⭐ **Version:** 1.0.0
