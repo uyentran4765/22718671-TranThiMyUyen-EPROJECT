@@ -232,7 +232,7 @@ Authorization: Bearer <JWT_TOKEN>
 
 ### 6. 🧾 Tạo đơn hàng
 
-**Endpoint:** `POST /orders/api/v1/buy`
+**Endpoint:** `POST /products/api/v1/buy`
 
 **Headers:**
 
