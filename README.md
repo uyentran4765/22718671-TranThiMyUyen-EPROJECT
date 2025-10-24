@@ -433,8 +433,6 @@ docker-compose up --build
 
 ---
 
----
-
 ## 🙏 Acknowledgments
 
 - **Node.js Community** - Cho ecosystem tuyệt vời
