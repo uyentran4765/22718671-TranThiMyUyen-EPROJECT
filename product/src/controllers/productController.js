@@ -54,11 +54,7 @@ class ProductController {
     return res.status(200).json(product);
   }
 
-  // getProductId = async (req, res) => {
-  //   const id = req.params.id;
-  //   const product = await this.productService.getProductById(id);
-  //   return res.status(200).json(product);
-  // }
+ 
 
   // async getOrderStatus(req, res, next) {
   //   const { orderId } = req.params;
