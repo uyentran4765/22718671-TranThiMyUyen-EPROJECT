@@ -49,22 +49,15 @@ class ProductController {
     return res.status(rs.code).json({ message: rs.message });
   }
 
-  // getProductId = async (req, res) =>{
-  //   try{
-  //     const id = req.params.id;
-  //     if(!id){
-  //       return res.statu(400).json({message: "ID not found"});
-  //     }
-  //     const product = await this.productService.getProductById(id);
-  //     if(!product){
-  //       return res.statu(400).json({message: "Product not found"});
-  //     }
-  //     return res.status(200).json(product);
-  //   }
-  //   catch(error){
-  //     console.error(error);
-  //     return res.status(500).json({message: "Server error"})
-  //   }
+  async getId(req, res, next){
+    const product = await Product.findById(req.params.id);
+    return res.status(200).json(product);
+  }
+
+  // getProductId = async (req, res) => {
+  //   const id = req.params.id;
+  //   const product = await this.productService.getProductById(id);
+  //   return res.status(200).json(product);
   // }
 
   // async getOrderStatus(req, res, next) {
