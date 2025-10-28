@@ -47,9 +47,6 @@ class AuthController {
 
     try {
       const user = await this.authService.getAllOrder(userId);
-
-      // messageBroker.
-
       res.json(user);
     } catch (err) {
       res.status(400).json({ message: err.message });

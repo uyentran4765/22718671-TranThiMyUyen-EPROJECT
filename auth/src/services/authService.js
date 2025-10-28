@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserRepository = require("../repositories/userRepository");
-const messageBroker = require('../helpers/messageBroker')
 const config = require("../config");
 const User = require("../models/user");
 
@@ -11,7 +10,6 @@ const User = require("../models/user");
 class AuthService {
   constructor() {
     this.userRepository = new UserRepository();
-    this.checkMessageProfile = null;
   }
 
   async findUserByUsername(username) {
@@ -32,7 +30,7 @@ class AuthService {
       return { success: false, message: "Invalid username or password" };
     }
 
-    const token = jwt.sign({ id: user._id, username: username }, config.jwtSecret);
+    const token = jwt.sign({ id: user._id }, config.jwtSecret);
 
     return { success: true, token };
   }
@@ -47,35 +45,6 @@ class AuthService {
   async deleteTestUsers() {
     // Delete all users with a username that starts with "test"
     await User.deleteMany({ username: /^test/ });
-  }
-
-
-  async getAllOrder(id) {
-    const user = await this.userRepository.getUserById(id);
-    const data = {
-      username: user.username
-    }
-
-
-    console.log(data)
-    await messageBroker.publishMessage('get-all-order', data);
-    this.checkMessageProfile = null;
-
-    messageBroker.channel.consume('wait-get-all-order', (msg) => {
-      const data = JSON.parse(msg.content.toString());
-      this.checkMessageProfile = data
-    })
-
-    while (!this.checkMessageProfile) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    const newUser = {
-      ...user,
-      orders: this.checkMessageProfile,
-    }
-
-    return newUser;
   }
 }
 
