@@ -37,7 +37,7 @@
                               └───────────────┘
 ```
 
-### Chi tiết từng service:
+<!-- ### Chi tiết từng service:
 
 - **API Gateway (Port 3003)**: Định tuyến request, xác thực JWT
 - **Auth Service (Port 3000)**: Đăng ký, đăng nhập, quản lý user
@@ -86,7 +86,7 @@
 - **Synchronous:** HTTP/REST qua API Gateway
 - **Asynchronous:** RabbitMQ message queues
 - **Security:** JWT tokens trong headers
-- **Network:** Docker internal network
+- **Network:** Docker internal network -->
 
 ---
 

@@ -111,10 +111,15 @@ class ProductController {
     }
   }
 
-  async getID(req, res) {
-    const id = req.params.id;
-    const rs = await Product.findOne({ _id: id });
-    return res.status(200).json(rs);
+  // async getID(req, res) {
+  //   const id = req.params.id;
+  //   const rs = await Product.findOne({ _id: id });
+  //   return res.status(200).json(rs);
+  // }
+
+  async getID(req, res){
+    const product = await Product.findById(req.params.id);
+    return res.status(200).json(product);
   }
 }
 
