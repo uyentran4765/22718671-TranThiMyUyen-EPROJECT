@@ -110,7 +110,7 @@ class ProductController {
       res.status(500).json({ message: "Server error" });
     }
   }
-
+  
 }
 
 module.exports = ProductController;
