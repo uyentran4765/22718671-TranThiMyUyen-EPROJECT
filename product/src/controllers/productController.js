@@ -111,10 +111,6 @@ class ProductController {
     }
   }
 
-  async getID(req, res){
-    const product = await Product.findById(req.params.id);
-    return res.status(200).json(product);
-  }
 }
 
 module.exports = ProductController;
